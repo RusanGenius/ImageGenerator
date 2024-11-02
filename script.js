@@ -1,7 +1,6 @@
 let prd = null;
 let uuid = '';
 
-// Задаём токены здесь
 const API_KEY = '184E246C448E0B2A88D604EB9A6A31DF';
 const SECRET_KEY = '1B35D150713F893B0625D02F5A4D540E';
 
@@ -12,7 +11,7 @@ function headers() {
     }
 }
 function params() {
-    return {
+    return {    
         type: "GENERATE",
         style: style.value,
         width: width.value,
@@ -27,7 +26,7 @@ function params() {
 
 async function generate() {
     document.getElementById('statusMessage').textContent = "Wait please...";
-    document.getElementById('statusMessage').style.color = "#b3b3b3"; // Серый цвет
+    document.getElementById('statusMessage').style.color = "#b3b3b3";
 
     let model_id = 0;
     {
@@ -66,32 +65,36 @@ async function check() {
     switch (json.status) {
         case 'INITIAL':
         case 'PROCESSING':
-            // Ожидание завершения
             break;
 
         case 'DONE':
-            // Установка изображения и отображение
             const imgElement = document.getElementById('img');
             imgElement.src = 'data:image/jpeg;charset=utf-8;base64,' + json.images[0];
-            imgElement.style.display = 'block'; // Отображаем картинку
+            imgElement.style.display = 'block';
 
-            // Меняем статус на "Done!" и делаем его зелёным
             document.getElementById('statusMessage').textContent = "Done!";
-            document.getElementById('statusMessage').style.color = "#4CAF50"; // Зелёный цвет
+            document.getElementById('statusMessage').style.color = "#4CAF50";
 
             clearInterval(prd);
             break;
 
         case 'FAIL':
             clearInterval(prd);
-            console.error("Ошибка при генерации изображения.");
+            console.error("РћС€РёР±РєР° РїСЂРё РіРµРЅРµСЂР°С†РёРё РёР·РѕР±СЂР°Р¶РµРЅРёСЏ.");
 
-            // Меняем статус на "Error" и делаем его красным
             document.getElementById('statusMessage').textContent = "Error";
-            document.getElementById('statusMessage').style.color = "#FF0000"; // Красный цвет
+            document.getElementById('statusMessage').style.color = "#FF0000";
             break;
     }
 }
+
+document.getElementById('width').addEventListener('input', function () {
+    if (this.value > 1024) this.value = 1024;
+});
+
+document.getElementById('height').addEventListener('input', function () {
+    if (this.value > 1024) this.value = 1024;
+});
 
 window.onload = async () => {
     let res = await fetch('https://cdn.fusionbrain.ai/static/styles/web');
