@@ -6,6 +6,7 @@
     <title>Image Generator</title>
     <script src="script.js" defer></script>
     <style>
+        /* Основные стили */
         * {
             margin: 0;
             padding: 0;
@@ -25,6 +26,7 @@
             padding-bottom: 30px;
         }
 
+        /* Стили для заголовков и полей */
         label {
             margin: 10px 0 5px;
             font-size: 0.9em;
@@ -45,6 +47,26 @@
             text-align: center;
         }
 
+        input[type="number"] {
+            width: 100%;
+            max-width: 138px;
+            padding: 10px;
+            margin: 5px 0 15px;
+            background-color: #2b2b2b;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 1em;
+            text-align: center;
+        }
+
+            /* Убираем стрелки в полях для чисел */
+            input[type="number"]::-webkit-outer-spin-button,
+            input[type="number"]::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
         .dimension-container {
             display: flex;
             gap: 20px;
@@ -57,25 +79,7 @@
             align-items: center;
         }
 
-        input[type="number"] {
-            max-width: 138px;
-            padding: 10px;
-            background-color: #2b2b2b;
-            border: 1px solid #333;
-            border-radius: 8px;
-            color: #ffffff;
-            font-size: 1em;
-            text-align: center;
-            -moz-appearance: textfield;
-            appearance: none;
-        }
-
-            input[type="number"]::-webkit-outer-spin-button,
-            input[type="number"]::-webkit-inner-spin-button {
-                -webkit-appearance: none;
-                margin: 0;
-            }
-
+        /* Стили для кнопки */
         button {
             padding: 15px 35px;
             margin-top: 30px;
@@ -92,6 +96,7 @@
                 background-color: #388E3C;
             }
 
+        /* Стили для изображения */
         img {
             display: none;
             margin: 20px auto;
@@ -100,56 +105,129 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
 
+        /* Сообщение о статусе */
         .status-message {
             font-size: 1em;
             color: #b3b3b3;
             margin-top: 10px;
         }
 
+        /* Футер */
         .footer {
             position: fixed;
             bottom: 10px;
             font-size: 0.8em;
             color: #888888;
         }
+
+        /* Стили для переключателя языка */
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggle-button {
+            width: 60px;
+            height: 30px;
+            background-color: #4CAF50;
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+        }
+
+            .toggle-button .circle {
+                width: 26px;
+                height: 26px;
+                background-color: #333;
+                border-radius: 50%;
+                position: absolute;
+                top: 2px;
+                left: 2px;
+                transition: all 0.3s ease;
+            }
+
+            .toggle-button.active {
+                background-color: #4CAF50;
+            }
+
+                .toggle-button.active .circle {
+                    left: 32px;
+                    background-color: #333;
+                }
+
+        .label-eng, .label-rus {
+            font-size: 0.9em;
+            color: #ffffff;
+        }
     </style>
 </head>
 <body>
-    <label for="query">Query</label>
-    <input id="query" type="text" placeholder="fluffy cat with glasses">
+    <!-- Переключатель языка -->
+    <div class="language-toggle">
+        <span class="label-eng">eng</span>
+        <div class="toggle-button" onclick="toggleLanguage()">
+            <div class="circle"></div>
+        </div>
+        <span class="label-rus">рус</span>
+    </div>
 
-    <label for="negative">Negative</label>
+    <!-- Форма для генерации изображения -->
+    <label for="query" id="queryLabel">Query</label>
+    <input id="query" type="text" placeholder="Cat in a black hat">
+
+    <label for="negative" id="negativeLabel">Negative</label>
     <input id="negative" type="text" value="">
 
-    <label for="style">Style</label>
+    <label for="style" id="styleLabel">Style</label>
     <select id="style"></select>
 
     <div class="dimension-container">
         <div class="dimension-item">
-            <label for="width">Width</label>
+            <label for="width" id="widthLabel">Width</label>
             <input id="width" type="number" value="512" max="1024">
         </div>
         <div class="dimension-item">
-            <label for="height">Height</label>
+            <label for="height" id="heightLabel">Height</label>
             <input id="height" type="number" value="512" max="1024">
         </div>
     </div>
 
-    <button onclick="generate()">Generate</button>
+    <button onclick="generate()" id="generateButton">Generate</button>
 
     <div class="status-message" id="statusMessage"></div>
 
     <img id="img" alt="Generated image">
 
-    <div class="footer">Created by Rusan</div>
+    <div class="footer" id="footer">Created by Rusan</div>
 
     <script>
-        const queryInput = document.getElementById("query");
+        let isEnglish = true;
 
-        queryInput.addEventListener("focus", function () {
+        function toggleLanguage() {
+            isEnglish = !isEnglish;
+            document.documentElement.lang = isEnglish ? "en" : "ru";
+
+            const toggleButton = document.querySelector(".toggle-button");
+            toggleButton.classList.toggle("active", !isEnglish);
+
+            // Обновляем текст на странице в зависимости от языка
+            document.getElementById("queryLabel").textContent = isEnglish ? "Query" : "Запрос";
+            document.getElementById("query").placeholder = isEnglish ? "Cat in a black hat" : "Кот в чёрной шляпе";
+            document.getElementById("negativeLabel").textContent = isEnglish ? "Negative" : "Негатив";
+            document.getElementById("styleLabel").textContent = isEnglish ? "Style" : "Стиль";
+            document.getElementById("widthLabel").textContent = isEnglish ? "Width" : "Ширина";
+            document.getElementById("heightLabel").textContent = isEnglish ? "Height" : "Высота";
+            document.getElementById("generateButton").textContent = isEnglish ? "Generate" : "Сгенерировать";
+            document.getElementById("footer").textContent = isEnglish ? "Created by Rusan" : "Сделал Русан";
+        }
+
+        document.getElementById("query").addEventListener("focus", function () {
             this.placeholder = "";
         });
-
     </script>
 </body>
 </html>
