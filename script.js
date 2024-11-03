@@ -88,6 +88,26 @@ async function check() {
     }
 }
 
+function toggleClearButton() {
+    const queryInput = document.getElementById('query');
+    const clearButton = document.getElementById('clearButton');
+    clearButton.style.display = queryInput.value ? 'inline' : 'none';
+}
+
+function clearInput() {
+    const queryInput = document.getElementById('query');
+    queryInput.value = '';
+    toggleClearButton();
+}
+
+document.getElementById("clearQuery").addEventListener("click", function () {
+    document.getElementById("query").value = "";
+});
+
+document.getElementById("clearNegative").addEventListener("click", function () {
+    document.getElementById("negative").value = "";
+});
+
 document.getElementById('width').addEventListener('input', function () {
     if (this.value > 1024) this.value = 1024;
 });
