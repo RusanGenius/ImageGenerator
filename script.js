@@ -88,6 +88,27 @@ async function check() {
     }
 }
 
+// Получаем элементы ввода и кнопку
+const widthInput = document.getElementById('width');
+const heightInput = document.getElementById('height');
+const generateButton = document.getElementById('generate');
+
+// Проверка и корректировка значений после потери фокуса
+function validateInput(input) {
+    let value = parseInt(input.value, 10);
+    if (isNaN(value)) return;
+
+    if (value < 128) {
+        input.value = 128;
+    }
+    else if (value > 1024) {
+        input.value = 1024;
+    }
+}
+
+widthInput.addEventListener('blur', () => validateInput(widthInput));
+heightInput.addEventListener('blur', () => validateInput(heightInput));
+
 function toggleClearButton() {
     const queryInput = document.getElementById('query');
     const clearButton = document.getElementById('clearButton');
@@ -106,14 +127,6 @@ document.getElementById("clearQuery").addEventListener("click", function () {
 
 document.getElementById("clearNegative").addEventListener("click", function () {
     document.getElementById("negative").value = "";
-});
-
-document.getElementById('width').addEventListener('input', function () {
-    if (this.value > 1024) this.value = 1024;
-});
-
-document.getElementById('height').addEventListener('input', function () {
-    if (this.value > 1024) this.value = 1024;
 });
 
 window.onload = async () => {
