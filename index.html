@@ -31,6 +31,15 @@
             color: #b3b3b3;
         }
 
+        .title {
+            position: absolute;
+            top: 2000px;
+            font-size: 2em;
+            color: #ffffff;
+            text-align: center;
+        }
+
+
         .content-wrapper {
             display: flex;
             flex-direction: column;
@@ -93,12 +102,13 @@
             color: #ffffff;
             font-size: 1em;
             text-align: center;
-            box-shadow: 0 0px 8px #030303;
+            box-shadow: 0 0px 5px #030303;
         }
 
         input[type="number"] {
             width: 100%;
-            max-width: 138px;
+            width: 138px;
+            box-sizing: border-box;
             padding: 10px;
             margin: 5px 0 15px;
             background-color: #2b2b2b;
@@ -107,7 +117,7 @@
             color: #ffffff;
             font-size: 1em;
             text-align: center;
-            box-shadow: 0 0px 8px #030303;
+            box-shadow: 0 0px 5px #030303;
         }
 
             input[type="number"]::-webkit-outer-spin-button,
@@ -143,6 +153,10 @@
 
             button:hover {
                 background-color: #388E3C;
+            }
+
+            button:active {
+                background-color: #2E7D32; /* Цвет, который будет при нажатии */
             }
 
         img {
@@ -190,14 +204,15 @@
             }
 
             .toggle-button .circle {
-                width: 26px;
-                height: 26px;
+                width: 22px;
+                height: 22px;
                 background-color: #4CAF50;
                 border-radius: 50%;
                 position: absolute;
-                top: 2px;
-                left: 2px;
+                top: 4px;
+                left: 4px;
                 transition: all 0.3s ease;
+                box-shadow: 0 0px 5px black;
             }
 
             .toggle-button.active {
@@ -205,7 +220,7 @@
             }
 
                 .toggle-button.active .circle {
-                    left: 32px;
+                    left: 34px;
                     background-color: #4CAF50;
                 }
 
@@ -224,14 +239,14 @@
         <span class="label-rus">рус</span>
     </div>
 
+    <h1 id="title">Image generator</h1>
+
     <div class="content-wrapper">
         <label for="query" id="queryLabel">Query</label>
         <div class="input-container">
             <input id="query" type="text" placeholder="Cat in a black hat">
             <button type="button" id="clearQuery" class="clear-button">&#10005;</button>
         </div>
-
-
 
     <label for="negative" id="negativeLabel">Negative</label>
     <div class="input-container">
@@ -245,11 +260,11 @@
     <div class="dimension-container">
         <div class="dimension-item">
             <label for="width" id="widthLabel">Width</label>
-            <input id="width" type="number" value="512" max="1024">
+            <input id="width" type="number" value="512" min = "128" max="1024">
         </div>
         <div class="dimension-item">
             <label for="height" id="heightLabel">Height</label>
-            <input id="height" type="number" value="512" max="1024">
+            <input id="height" type="number" value="512" min = "128" max="1024">
         </div>
     </div>
 
@@ -271,6 +286,16 @@
             const toggleButton = document.querySelector(".toggle-button");
             toggleButton.classList.toggle("active", !isEnglish);
 
+            if (negativeInput.value === 'rusan' || negativeInput.value === 'Rusan') {
+                document.getElementById("title").textContent = isEnglish ? "Rusan is a genius" : "Русан - гений";
+            }
+            else if (negativeInput.value === 'Русан' || negativeInput.value === 'русан') {
+                document.getElementById("title").textContent = isEnglish ? "Rusan is a genius" : "Русан - гений";
+            }
+            else {
+                document.getElementById("title").textContent = isEnglish ? "Image generator" : "Генератор изображений";
+            }
+
             document.getElementById("queryLabel").textContent = isEnglish ? "Query" : "Запрос";
             document.getElementById("query").placeholder = isEnglish ? "Cat in a black hat" : "Кот в чёрной шляпе";
             document.getElementById("negativeLabel").textContent = isEnglish ? "Negative" : "Негатив";
@@ -287,6 +312,20 @@
 
         document.getElementById("query").addEventListener("focus", function () {
             this.placeholder = "";
+        });
+
+        const title = document.getElementById('title');
+        const negativeInput = document.getElementById('negative');
+
+        generateButton.addEventListener('click', () => {
+            if (negativeInput.value === 'rusan' || negativeInput.value === 'Rusan') (negativeInput.value === 'русан' || negativeInput.value === 'Русан'); {
+                title.textContent = 'Rusan is a genius';
+                document.getElementById('statusMessage').textContent = "";
+                document.getElementById('statusMessage').style.color = "#4CAF50";
+            }
+
+            // Дополнительная логика для генерации изображения
+            console.log(`Generating image with query: ${negativeInput.value}`);
         });
     </script>
 </body>
