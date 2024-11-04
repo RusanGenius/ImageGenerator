@@ -289,9 +289,6 @@
             if (negativeInput.value === 'rusan' || negativeInput.value === 'Rusan') {
                 document.getElementById("title").textContent = isEnglish ? "Rusan is a genius" : "Русан - гений";
             }
-            else if (negativeInput.value === 'Русан' || negativeInput.value === 'русан') {
-                document.getElementById("title").textContent = isEnglish ? "Rusan is a genius" : "Русан - гений";
-            }
             else {
                 document.getElementById("title").textContent = isEnglish ? "Image generator" : "Генератор изображений";
             }
@@ -318,14 +315,14 @@
         const negativeInput = document.getElementById('negative');
 
         generateButton.addEventListener('click', () => {
-            if (negativeInput.value === 'rusan' || negativeInput.value === 'Rusan') (negativeInput.value === 'русан' || negativeInput.value === 'Русан'); {
+            if (negativeInput.value === 'rusan' || negativeInput.value === 'Rusan') {
                 title.textContent = 'Rusan is a genius';
                 document.getElementById('statusMessage').textContent = "";
                 document.getElementById('statusMessage').style.color = "#4CAF50";
             }
-
-            // Дополнительная логика для генерации изображения
-            console.log(`Generating image with query: ${negativeInput.value}`);
+            else {
+                title.textContent = 'Image generator';
+            }
         });
     </script>
 </body>
